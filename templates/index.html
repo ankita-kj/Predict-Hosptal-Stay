@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Oppholdslengde Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Title styling */
+        h1 {
+            color: #9e006c;
+            text-align: center;
+            margin-bottom: 20px; 
+        }
+
+        /* Form layout */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; 
+        }
+
+        fieldset {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px; 
+        }
+
+        legend {
+            font-weight: bold;
+            color: #9e006c;
+        }
+
+        label {
+            display: block;
+            margin: 5px 0; 
+            font-weight: bold;
+            color: #333;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px; 
+            margin-bottom: 10px; 
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box; 
+            font-size: 16px; 
+        }
+
+        button {
+            background-color: #9e006c;
+            color: #fff;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px; 
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #7d0054; 
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #9e006c;
+            color: #fff;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Predict Oppholdslengde</h1>
+        <form action="{{ url_for('predict') }}" method="post">
+            <fieldset>
+                <legend>Required Data</legend>
+
+                <label for="sykdom_underkategori_ARF/MOSF">Sykdom Underkategori ARF/MOSF w/Sepsis</label>
+                <select name="sykdom_underkategori_ARF/MOSF" required>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+
+                <label for="overlevelsesestimat_6mnd">Overlevelsesestimat 6mnd (tall mellom 0 og 1)</label>
+                <input type="number" step="any" min="0" max="1" name="overlevelsesestimat_6mnd" required>
+
+                <label for="alder">Alder</label>
+                <input type="number" step="1" min="0" name="alder" required>
+
+                <label for="fysiologisk_score">Fysiologisk Score</label>
+                <input type="number" step="any" min="0" name="fysiologisk_score" required>
+
+                <label for="apache_fysiologisk_score">APACHE Fysiologisk Score</label>
+                <input type="number" step="any" min="0"  name="apache_fysiologisk_score" required>
+
+                <label for="overlevelsesestimat_2mnd">Overlevelsesestimat 2mnd (tall mellom 0 og 1)</label>
+                <input type="number" step="any" min="0" max="1" name="overlevelsesestimat_2mnd" required>
+
+                <label for="dnr_status">DNR Status</label>
+                <select name="dnr_status" required>
+                    <option value="0">None</option>
+                    <option value="1">DNR ved innleggelse</option>
+                    <option value="2">DNR før innleggelse</option>
+                </select>
+
+                <label for="hvite_blodlegemer">Hvite Blodlegemer</label>
+                <input type="number" step="any" min="0" placeholder="Standard verdi: 9" name="hvite_blodlegemer" required>
+
+                <label for="lungefunksjon">Lungefunksjon</label>
+                <input type="number" step="any" min="0" placeholder="Standard verdi: 333.3" name="lungefunksjon" required>
+
+                <label for="lege_overlevelsesestimat_6mnd">Lege Overlevelsesestimat 6mnd (tall mellom 0 og 1)</label>
+                <input type="number" step="any" min="0" max="1" name="lege_overlevelsesestimat_6mnd" required>
+                
+            </fieldset>
+
+            <button type="submit">Predict</button>
+        </form>
+
+        <div class="result">
+            {{ prediction_text }}
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
